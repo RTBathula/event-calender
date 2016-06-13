@@ -1,0 +1,25 @@
+{
+  "name": "calender-fe",
+  "version": "1.0.0",
+  "description": "A Calender app to create events using google maps",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "maps",
+    "events",
+    "caleder",
+    "schedular"
+  ],
+  "author": "Ravi Teja Bathula",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "iso-3166-2.json": "^0.1.0",
+    "mongodb": "^2.1.18",
+    "q": "^1.4.1"
+  }
+}

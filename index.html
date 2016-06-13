@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Calender">
+<head>  
+  <meta charset="utf-8"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content=""> 
+  <meta name="fragment" content="!"/>  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <title>Calender</title> 
+
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Vendor CSS -->
+  <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/ng-sortable/dist/ng-sortable.min.css">  
+  <link href="assets/js/AmaranJS/dist/css/amaran.min.css" rel="stylesheet"/>
+
+  <!--Custom CSS Links-->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body ng-controller="indexController">
+
+<!--Dynamic Page Loads-->
+<ui-view></ui-view>
+
+<!-- Javascript vendors -->  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyCmmRxCtWbVC9ZjU1Zz1maUGqQCjLRz4ks"></script>
+<script type="text/javascript" src="assets/js/AmaranJS/dist/js/jquery.amaran.min.js"></script>
+
+<!--Angular vendor-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
+<script src="bower_components/angularjs-datepicker/dist/angular-datepicker.min.js"></script> 
+<script src="bower_components/ngmap/build/scripts/ng-map.min.js"></script>
+<script src="bower_components/ng-sortable/dist/ng-sortable.min.js"></script>
+
+<!--Angular App-->
+<script type="text/javascript" src="angular/config/app.js"></script>
+<script type="text/javascript" src="angular/config/route.js"></script>
+
+<!-- Services -->
+<script src="angular/services/eventService.js"></script>
+
+<!--Controllers-->
+<script type="text/javascript" src="angular/controllers/indexController.js"></script>
+<script type="text/javascript" src="angular/controllers/loginController.js"></script>
+<script type="text/javascript" src="angular/controllers/adminDashboardController.js"></script>
+
+</body>
+</html>

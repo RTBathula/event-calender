@@ -1,0 +1,36 @@
+
+<section style="background-color:#CCCCCC; height:100vh;" class="flex-column-center">
+  <div class="" style="width:30%; min-width:240px;">
+      
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="login-wrapper">
+
+            <form name="adminLogin" ng-submit="login()">
+              <div style="width:100%;" class="flex-column-center">
+                <img src="assets/images/logo.png" style="height:80px;">
+              </div>
+
+              <div style="width:100%;height:40px;margin-top:15px;" class="flex-column-center">
+                <h2 style="color:#A0A0A0;font-weight:700;">Admin Login </h2>
+              </div>
+
+              <div style="width:100%;height:40px;margin-top:20px;" class="flex-column-center">
+                <input type="text" ng-model="login.username" class="default-inputfield admin-login-input" placeholder="Username" required>
+              </div>
+
+              <div style="width:100%;height:40px;margin-top:12px;" class="flex-column-center">
+                <input type="password" ng-model="login.password" class="default-inputfield admin-login-input" placeholder="Password" required>
+              </div>
+
+              <div style="width:100%;height:40px;margin-top:12px;" class="flex-column-center">
+                <button type="submit" class="default-inputfield admin-login-btn">Login</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+     
+    </div>
+  </div>
+</section>
