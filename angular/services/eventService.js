@@ -28,7 +28,35 @@ app.factory('eventService', ['$q','$http',function ($q,$http) {
       });
 
       return  q.promise;
-    };  
+    }; 
+
+    global.updateEventById = function(eventId,eventObject){
+      var q=$q.defer();
+
+      $http.put('/event/'+eventId, {data:eventObject}).
+      success(function(data, status, headers, config) {
+        q.resolve(data);          
+      }).
+      error(function(data, status, headers, config) {
+        q.reject(data);
+      });
+
+      return  q.promise;
+    };
+
+    global.deleteEvent = function(eventId){
+      var q=$q.defer();
+
+      $http.delete('/event/'+eventId).
+      success(function(data, status, headers, config) {
+        q.resolve(data);          
+      }).
+      error(function(data, status, headers, config) {
+        q.reject(data);
+      });
+
+      return  q.promise;
+    }; 
 
     return global;
 

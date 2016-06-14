@@ -63,7 +63,27 @@ app.controller('adminDashboardController',
     	}    	
     };
 
+    $scope.deleteEvent=function(eventId){
+        eventService.deleteEvent(eventId).then(function(resp){
+            var deleteIndex;
+            for(var i=0;i<$scope.eventList.length;++i){
+                if($scope.eventList[i]._id==eventId){
+                    deleteIndex=i;
+                    break;
+                }
+            }
+            if(deleteIndex>-1){
+                $scope.eventList.splice(deleteIndex,1);
+            }
+        },function(error){
+            errorNotify("Unable to delete event now..try again.");
+        });
+    };
+
     $scope.toggleEvent=function(eventId,bool){
+        for(var i=0;i<$scope.eventList.length;++i){
+            $scope.toggleEventEdit[$scope.eventList[i]._id]=false;
+        }
     	$scope.toggleEventEdit[eventId]=bool;
     };
 
@@ -75,11 +95,43 @@ app.controller('adminDashboardController',
 
 	$scope.dragControlListeners = {
 	    accept: function (sourceItemHandleScope, destSortableScope) {
-	    	return true;
+           $scope.cloneEventList=angular.copy($scope.eventList);
+	       return true;
 	    },	   
-	    orderChanged: function(event) {
-	    	console.log("hsdhdsh");
-	    },	    
+	    dragEnd : function(event) {
+	    	var destIndex=event.dest.index;
+            var sourceIndex=event.source.index;           
+            
+            //Sort
+            $scope.cloneEventList.sort(function(a,b){
+                return parseInt(a.sortOrder) - parseInt(b.sortOrder);
+            });
+
+            $scope.cloneEventList[sourceIndex].sortOrder=destIndex+1;
+            //Update SortOrder change to backend
+            eventService.updateEventById($scope.cloneEventList[sourceIndex]._id,{sortOrder:$scope.cloneEventList[sourceIndex].sortOrder});
+            
+            if(sourceIndex>destIndex){
+                //Change order of all remaining items           
+                for(var i=destIndex;i<sourceIndex;++i){
+                    $scope.cloneEventList[i].sortOrder=i+2;
+                    //Update SortOrder change to backend
+                    eventService.updateEventById($scope.cloneEventList[i]._id,{sortOrder:$scope.cloneEventList[i].sortOrder});
+                }
+            }
+
+            if(destIndex>sourceIndex){
+                for(var i=destIndex;i>sourceIndex;--i){
+                    $scope.cloneEventList[i].sortOrder=i;
+                    //Update SortOrder change to backend
+                    eventService.updateEventById($scope.cloneEventList[i]._id,{sortOrder:$scope.cloneEventList[i].sortOrder});
+                }
+            }            
+            
+            //Assign new Order
+            $scope.eventList=angular.copy($scope.cloneEventList);
+            $scope.cloneEventList=[];
+	    },   
 	    allowDuplicates: true
 	};	
 

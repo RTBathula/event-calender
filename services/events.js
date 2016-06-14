@@ -1,5 +1,7 @@
 'use strict';
 
+var ObjectId=require('mongodb').ObjectId;
+
 module.exports = function(Beacon){
 
   return {
@@ -59,10 +61,10 @@ module.exports = function(Beacon){
         try{
             
           var collection=global.mongoDB.collection("event");
-          collection.findOneAndUpdate({_id:eventId},{$set:eventObject},{returnOriginal: false},function(err,response){
+          collection.findOneAndUpdate({_id:new ObjectId(eventId)},{$set:eventObject},{returnOriginal: false},function(err,response){
               if (err) {                
                 deferred.reject(err);
-              } else { 
+              } else {                
                 deferred.resolve(response);
               }
           });
@@ -81,7 +83,7 @@ module.exports = function(Beacon){
         try{
             
           var collection=global.mongoDB.collection("event");
-          collection.deleteOne({_id:eventId},{ w: 1},function(err,response){
+          collection.findOneAndDelete({_id: new ObjectId(eventId)},function(err,response){
               if (err) {                
                 deferred.reject(err);
               } else { 

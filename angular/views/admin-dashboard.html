@@ -24,7 +24,7 @@
 
   <!---EVENT LIST-->
   <div class="container" data-as-sortable="dragControlListeners" data-ng-model="eventList">   
-    <div ng-repeat="event in eventList" class="row" data-as-sortable-item>
+    <div ng-repeat="event in eventList | orderBy:'sortOrder'" class="row" data-as-sortable-item>
       <div data-as-sortable-item-handle class="col-xs-12  col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
         <!--Event-->
         <div class="admin-event-bx">
@@ -47,12 +47,12 @@
               <div class="pull-right flex-row"> 
                 <div>  
                   <!--Edit-->           
-                  <button ng-click="toggleEvent(event.id,true)" ng-show="toggleEventEdit[event.id]!=true" class="default-inputfield admin-event-btn">edit</button> 
+                  <button ng-click="toggleEvent(event._id,true)" ng-show="toggleEventEdit[event._id]!=true" class="default-inputfield admin-event-btn">edit</button> 
                   <!--Hide-->  
-                  <button ng-click="toggleEvent(event.id,false)" ng-show="toggleEventEdit[event.id]==true" class="default-inputfield admin-event-btn">hide</button> 
+                  <button ng-click="toggleEvent(event._id,false)" ng-show="toggleEventEdit[event._id]==true" class="default-inputfield admin-event-btn">hide</button> 
                 </div> 
                 <div>               
-                  <button class="default-inputfield admin-event-btn">delete</button> 
+                  <button ng-click="deleteEvent(event._id)" class="default-inputfield admin-event-btn">delete</button> 
                 </div>                              
               </div>
              
@@ -61,14 +61,14 @@
           <!--/Shrink-->
 
           <!--Expand-->
-          <div ng-show="toggleEventEdit[event.id]==true" class="expand-bx">           
+          <div ng-show="toggleEventEdit[event._id]==true" class="expand-bx">           
 
             <div class="row" style="margin-top:15px;">
               <div class="col-xs-12 col-sm-3 col-md-2">
                 <label style="margin-top:2px;">title</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" class="default-inputfield event-form-input" placeholder="title">
+                <input type="text" ng-model="event.title" class="default-inputfield event-form-input" placeholder="title">
               </div>
             </div>
 
@@ -77,7 +77,7 @@
                 <label style="margin-top:2px;">description</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <textarea class="default-inputfield event-form-textarea" placeholder="description"></textarea>
+                <textarea ng-model="event.description" class="default-inputfield event-form-textarea" placeholder="description"></textarea>
               </div>
             </div>
 
@@ -86,7 +86,7 @@
                 <label style="margin-top:2px;">address</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" class="default-inputfield event-form-input" placeholder="address">
+                <input type="text" ng-model="event.address" class="default-inputfield event-form-input" placeholder="address">
               </div>
             </div>
 
@@ -95,7 +95,7 @@
                 <label style="margin-top:2px;">zip</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" class="default-inputfield event-form-input" placeholder="zip">
+                <input type="text" ng-model="event.zip" class="default-inputfield event-form-input" placeholder="zip">
               </div>
             </div>
 
@@ -104,8 +104,8 @@
                 <label style="margin-top:2px;">country</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <select class="default-inputfield event-form-input" style="background-color:white;">
-                  <option value="0">Select Country</option>
+                <select ng-model="event.country" class="default-inputfield event-form-input" style="background-color:white;">
+                  <option value="select-country" ng-selected="event.country=='select-country'">Select Country</option>
                   <option ng-repeat="country in countryList">{{country.name}}</option>
                 </select>
               </div>
@@ -117,7 +117,7 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <datepicker date-format="yyyy-MM-dd">
-                  <input ng-model="date" type="text" class="default-inputfield event-form-input" placeholder="Start Date" />
+                  <input ng-model="event.startDate" type="text" class="default-inputfield event-form-input" placeholder="Start Date" />
                 </datepicker>
               </div>
             </div>
@@ -128,7 +128,7 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <datepicker date-format="yyyy-MM-dd">
-                  <input ng-model="date" type="text" class="default-inputfield event-form-input" placeholder="End Date"/>
+                  <input ng-model="event.endDate" type="text" class="default-inputfield event-form-input" placeholder="End Date"/>
                 </datepicker>
               </div>
             </div>
@@ -138,9 +138,9 @@
                 <label style="margin-top:2px;">category</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <select class="default-inputfield event-form-input" style="background-color:white;">
-                  <option value="0">Select Category</option>
-                  <option ng-repeat="cat in categoryList">{{cat}}</option>
+                <select ng-model="event.category" class="default-inputfield event-form-input" style="background-color:white;">
+                  <option value="select-category" ng-selected="event.category=='select-category'">Select Category</option>
+                  <option ng-repeat="cat in categoryList" ng-selected="event.category==cat">{{cat}}</option>
                 </select>
               </div>
             </div>
