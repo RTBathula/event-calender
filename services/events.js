@@ -65,7 +65,7 @@ module.exports = function(Beacon){
               if (err) {                
                 deferred.reject(err);
               } else {                
-                deferred.resolve(response);
+                deferred.resolve("Successfully updated.");
               }
           });
 

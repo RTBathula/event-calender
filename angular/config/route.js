@@ -8,7 +8,8 @@ app.config([
 
   $stateProvider.state('events',{
     url:'/',
-    templateUrl:'angular/views/events.html'              
+    templateUrl:'angular/views/events.html',
+    controller: 'eventsController'               
   }); 
 
   $stateProvider.state('login',{
@@ -48,3 +49,32 @@ app.filter('formatenddate', function($rootScope) {
   }
 });
 
+app.filter('getcountrycode', function($rootScope) {
+  return function(name) {
+    if(name){
+      for (var key in $rootScope.countryList) {
+        if ($rootScope.countryList.hasOwnProperty(key) && $rootScope.countryList[key].name==name) {
+          return key;
+          break;
+        }
+      }
+    }       
+  }
+});
+
+app.filter('limittext', function($rootScope) {
+  return function(text) {
+    if(text){
+      var ElmContent=text;
+      if(ElmContent.length>12){
+          var trimmedString=ElmContent.substring(0, 12);
+          trimmedString=trimmedString+"...";
+          return trimmedString;
+      }else{
+        return text;
+      }
+    }       
+  }
+});
+
+ 

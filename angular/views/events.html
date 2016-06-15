@@ -1,7 +1,19 @@
 
-<section>
+<section ng-init="init()">
 <!--Map-->
 <div class="map-wrapper">
+  <map center="[40,30]" zoom="2">
+   <marker ng-repeat="event in eventsMap" position="{{event.coordinates}}"></div>
+   <info-window id="1" position="{{event.coordinates}}" >
+     <div ng-non-bindable>
+       Chicago, IL<br/>
+       LatLng: , , <br/>
+       World Coordinate: , , <br/>
+       Pixel Coordinate: , , <br/>
+       Tile Coordinate: ,  at Zoom Level 
+     </div>
+   </info-window>
+  </map>
 </div>
 <!--/Map--> 
 
@@ -29,87 +41,46 @@
         <!--Events List-->
         <div class="row">
           <!--Each Event Box-->
-          <div class="col-xs-6 col-sm-6 col-md-6">
+          <div ng-repeat="event in eventListCatA | orderBy:'sortOrder'" ng-show="event.category=='CatA'" class="col-xs-6 col-sm-6 col-md-6">
             <div class="event-bx">
-              <div class="each-line cf">
-                <div class="pull-left">
-                14-35455566
+                <div class="each-line cf">
+                  <div class="pull-left">
+                  {{event.startDate | formatstartdate}} - {{event.endDate | formatenddate}}
+                  </div>
+                  <div class="pull-right event-cat-name">
+                  {{event.category}}
+                  </div>
                 </div>
-                <div class="pull-right event-cat-name">
-                Cat.A
-                </div>
-              </div>
 
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <strong>1223233</strong>
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <strong>{{event.title}}</strong>
+                  </div>
+                  <div class="pull-right event-cat-name" style="margin-right:26px;">
+                  {{$index+1}}
+                  </div>
                 </div>
-                <div class="pull-right event-cat-name" style="margin-right:26px;">
-                1
+
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <strong>{{event.address}} / {{event.country | getcountrycode}}</strong>
+                  </div>                
                 </div>
-              </div>
 
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <strong>1223233</strong>
-                </div>                
+                <div class="each-line cf" style="margin-top:20px;">
+                  <div class="pull-left">
+                    <strong>{{event.description | limittext}}</strong>
+                  </div>                
+                </div>
+                
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <button class="default-inputfield show-map-btn">Show on map</button>
+                  </div>                
+                </div> 
               </div>
-
-              <div class="each-line cf" style="margin-top:20px;">
-                <div class="pull-left">
-                  <strong>1223233</strong>
-                </div>                
-              </div>
-              
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <button class="default-inputfield show-map-btn">Show on map</button>
-                </div>                
-              </div> 
-            </div>
           </div>          
-          <!--/Each Event Box-->
-          <!--Each Event Box-->
-          <div class="col-xs-6 col-sm-6 col-md-6">
-            <div class="event-bx">
-              <div class="each-line cf">
-                <div class="pull-left">
-                14-35455566
-                </div>
-                <div class="pull-right event-cat-name">
-                Cat.A
-                </div>
-              </div>
-
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <strong>1223233</strong>
-                </div>
-                <div class="pull-right event-cat-name" style="margin-right:26px;">
-                1
-                </div>
-              </div>
-
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <strong>1223233</strong>
-                </div>                
-              </div>
-
-              <div class="each-line cf" style="margin-top:20px;">
-                <div class="pull-left">
-                  <strong>1223233</strong>
-                </div>                
-              </div>
-              
-              <div class="each-line cf">
-                <div class="pull-left">
-                  <button class="default-inputfield show-map-btn">Show on map</button>
-                </div>                
-              </div> 
-            </div>
-          </div>          
-          <!--/Each Event Box-->       
+          <!--/Each Event Box-->                 
         </div>
         <!--Events List-->
       
@@ -129,10 +100,48 @@
 
         <!--Events-->
         <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="event-bx">
-            </div>
-          </div>       
+          <!--Each Event Box--> 
+          <div ng-repeat="event in eventListCatB | orderBy:'sortOrder'" ng-show="event.category=='CatB'" class="col-xs-12 col-sm-12 col-md-12">
+
+              <div class="event-bx">
+                <div class="each-line cf">
+                  <div class="pull-left">
+                  {{event.startDate | formatstartdate}} - {{event.endDate | formatenddate}}
+                  </div>
+                  <div class="pull-right event-cat-name">
+                  {{event.category}}
+                  </div>
+                </div>
+
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <strong>{{event.title}}</strong>
+                  </div>
+                  <div class="pull-right event-cat-name" style="margin-right:26px;">
+                  {{$index+1}}
+                  </div>
+                </div>
+
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <strong>{{event.address}} / {{event.country | getcountrycode}}</strong>
+                  </div>                
+                </div>
+
+                <div class="each-line cf" style="margin-top:20px;">
+                  <div class="pull-left">
+                    <strong>{{event.description | limittext}}</strong>
+                  </div>                
+                </div>
+                
+                <div class="each-line cf">
+                  <div class="pull-left">
+                    <button class="default-inputfield show-map-btn">Show on map</button>
+                  </div>                
+                </div> 
+              </div>               
+            </div> 
+           <!--/Each Event Box-->      
         </div>
         <!--Events-->
 

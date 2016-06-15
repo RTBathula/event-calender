@@ -12,15 +12,10 @@ app.controller('adminDashboardController',
     $scope.init=function(){
     	$scope.userName=$.cookie('username');
     	$scope.addNewEventFormShow=false;
-        _initAddEventDefaultForm()
-   		_getCountries().then(function(countriesJson){
-   			$scope.countryList=countriesJson;                         			
-   		});
-
+        _initAddEventDefaultForm();
         getAllEvents().then(function(list){
             $scope.eventList=list;
         },function(error){
-
         });
     };
 
@@ -30,17 +25,9 @@ app.controller('adminDashboardController',
             errorNotify(errorMessage);
         }
         if(!errorMessage){
-            $scope.addEventSpinner=true; 
-
-            for (var key in $scope.countryList) {
-                if ($scope.countryList.hasOwnProperty(key) && $scope.countryList[key].name==$scope.addNewEventForm.country) {
-                  $scope.addNewEventForm.country=key;
-                  break;
-                }
-            } 
-
+            $scope.addEventSpinner=true;
             $scope.addNewEventForm.sortOrder=$scope.eventList.length+1;
-
+            
             eventService.addEvent($scope.addNewEventForm).then(function(resp){
                 $scope.addEventSpinner=false;
                 successNotify("Successfully added new event.");
@@ -51,6 +38,25 @@ app.controller('adminDashboardController',
             },function(error){
                 $scope.addEventSpinner=false;
                 errorNotify("Error on adding a new event.");
+            });
+        }        
+    };
+
+    $scope.updateEvent=function(eventObject){
+        var errorMessage=_validateEventFields(eventObject);
+        if(errorMessage){
+            errorNotify(errorMessage);
+        }
+        if(!errorMessage){
+            //Update to backend
+            var cloneEventObject=angular.copy(eventObject);
+            var eventId=cloneEventObject._id;
+            delete cloneEventObject._id;
+
+            eventService.updateEventById(eventId,cloneEventObject)
+            .then(function(resp){
+            },function(error){
+                errorNotify(error);
             });
         }        
     };
@@ -85,13 +91,7 @@ app.controller('adminDashboardController',
             $scope.toggleEventEdit[$scope.eventList[i]._id]=false;
         }
     	$scope.toggleEventEdit[eventId]=bool;
-    };
-
-    $scope.getAddEventCoordinates=function(){
-        _getCoordinates($scope.searchAddress).then(function(coordinates){
-            $scope.addNewEventForm.coordinates=coordinates;
-        });    	
-	};
+    };    
 
 	$scope.dragControlListeners = {
 	    accept: function (sourceItemHandleScope, destSortableScope) {
@@ -133,20 +133,38 @@ app.controller('adminDashboardController',
             $scope.cloneEventList=[];
 	    },   
 	    allowDuplicates: true
-	};	
-
-    $scope.markerDropped=function(){
-    	console.log("fcf");    	
-    };
+	};    
 
     $scope.logOut=function(){
    	  $.removeCookie('username', { path: '/' });
       window.location.href="/#/login";
     };
 
+    $scope.getAddEventCoordinates=function(){
+        _getCoordinates($scope.searchAddress).then(function(coordinates){
+            $scope.addNewEventForm.coordinates=coordinates;
+        });     
+    };
+
+    $scope.getUpdateEventCoordinates=function(eventObject){
+        _getCoordinates($scope.searchAddress).then(function(coordinates){
+            eventObject.coordinates=coordinates;
+            $scope.updateEvent(eventObject);
+        });     
+    };
+
+    $scope.markerDropped=function($event){        
+        $scope.addNewEventForm.coordinates=[$event.latLng.lat(),$event.latLng.lng()];    
+    }; 
+
+    $scope.updateEventMarkerDropped=function($event,eventObject){        
+        eventObject.coordinates=[$event.latLng.lat(),$event.latLng.lng()];
+        $scope.updateEvent(eventObject);   
+    };  
+
     NgMap.getMap().then(function(map) {
-    	google.maps.event.trigger( map, 'resize' );   	
-  	});
+    	google.maps.event.trigger( map, 'resize' );                	
+  	});       
 
     /******Private Functions********/
     function getAllEvents(){
@@ -189,6 +207,9 @@ app.controller('adminDashboardController',
         if(!eventObject.zip){
             return "Event zip is required.";
         }
+        if(eventObject.zip && isNaN(eventObject.zip)){
+            return "Event zip is invalid";
+        }
         if(eventObject.country=="select-country"){
             return "Event country is required.";
         }
@@ -209,7 +230,7 @@ app.controller('adminDashboardController',
         if(eventObject.startDate && eventObject.endDate){
             var startDateTimeStamp=angular.copy(new Date(eventObject.startDate).getTime());
             var endDateTimeStamp=angular.copy(new Date(eventObject.endDate).getTime());
-            if(endDateTimeStamp<=currentTimeStamp){
+            if(endDateTimeStamp<=startDateTimeStamp){
                 return "Event end date shouldn't be same or less than start date.";
             }
         }
@@ -233,25 +254,7 @@ app.controller('adminDashboardController',
         });
 
         return  q.promise;
-    }
-
-    function _getCountries(){ 
-	    var q=$q.defer();
-
-	    var xmlhttp = new XMLHttpRequest();
-	    xmlhttp.onreadystatechange = function(){
-	      if(xmlhttp.status === 200 && xmlhttp.readyState === 4){
-	        q.resolve(JSON.parse(xmlhttp.responseText));
-	      }
-	      if(xmlhttp.status !== 200 && xmlhttp.status!==0){
-	        q.reject("Failed to load countries");
-	      }
-	    };
-	    xmlhttp.open("GET","node_modules/iso-3166-2.json/iso-3166-2.json",true);
-	    xmlhttp.send();
-
-	    return  q.promise;
-	}
+    } 
 
 }]);
 

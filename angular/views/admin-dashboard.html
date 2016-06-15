@@ -38,7 +38,7 @@
                   <i class="fa fa-arrows" aria-hidden="true" style="color:#727272;"></i>
                 </div>
                 <div style="font-weight:700;margin-left:2px;">Event {{$index+1}}</div>
-                <div style="font-weight:700;">/{{event.country}}</div>&nbsp;
+                <div style="font-weight:700;">/{{event.country | getcountrycode}}</div>&nbsp;
                 <div style="font-style:italic">{{event.startDate | formatstartdate}} - </div>
                 <div style="font-style:italic">&nbsp;{{event.endDate | formatenddate}}</div>
                 <div>&nbsp;&nbsp;RSVP:{{event.rsvp}}</div>
@@ -68,7 +68,7 @@
                 <label style="margin-top:2px;">title</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" ng-model="event.title" class="default-inputfield event-form-input" placeholder="title">
+                <input type="text" ng-model="event.title" ng-change="updateEvent(event)" class="default-inputfield event-form-input" placeholder="title">
               </div>
             </div>
 
@@ -77,7 +77,7 @@
                 <label style="margin-top:2px;">description</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <textarea ng-model="event.description" class="default-inputfield event-form-textarea" placeholder="description"></textarea>
+                <textarea ng-model="event.description" ng-change="updateEvent(event)" class="default-inputfield event-form-textarea" placeholder="description"></textarea>
               </div>
             </div>
 
@@ -86,7 +86,7 @@
                 <label style="margin-top:2px;">address</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" ng-model="event.address" class="default-inputfield event-form-input" placeholder="address">
+                <input type="text" ng-model="event.address" ng-change="updateEvent(event)" class="default-inputfield event-form-input" placeholder="address">
               </div>
             </div>
 
@@ -95,7 +95,7 @@
                 <label style="margin-top:2px;">zip</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input type="text" ng-model="event.zip" class="default-inputfield event-form-input" placeholder="zip">
+                <input type="text" ng-model="event.zip" ng-change="updateEvent(event)" class="default-inputfield event-form-input" placeholder="zip">
               </div>
             </div>
 
@@ -104,9 +104,9 @@
                 <label style="margin-top:2px;">country</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <select ng-model="event.country" class="default-inputfield event-form-input" style="background-color:white;">
+                <select ng-model="event.country" ng-change="updateEvent(event)" class="default-inputfield event-form-input" style="background-color:white;">
                   <option value="select-country" ng-selected="event.country=='select-country'">Select Country</option>
-                  <option ng-repeat="country in countryList">{{country.name}}</option>
+                  <option ng-repeat="country in countryList" ng-selected="event.country==country.name">{{country.name}}</option>
                 </select>
               </div>
             </div>
@@ -117,7 +117,7 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <datepicker date-format="yyyy-MM-dd">
-                  <input ng-model="event.startDate" type="text" class="default-inputfield event-form-input" placeholder="Start Date" />
+                  <input ng-model="event.startDate" ng-change="updateEvent(event)" type="text" class="default-inputfield event-form-input" placeholder="Start Date" />
                 </datepicker>
               </div>
             </div>
@@ -128,7 +128,7 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <datepicker date-format="yyyy-MM-dd">
-                  <input ng-model="event.endDate" type="text" class="default-inputfield event-form-input" placeholder="End Date"/>
+                  <input ng-model="event.endDate" ng-change="updateEvent(event)" type="text" class="default-inputfield event-form-input" placeholder="End Date"/>
                 </datepicker>
               </div>
             </div>
@@ -138,7 +138,7 @@
                 <label style="margin-top:2px;">category</label>
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <select ng-model="event.category" class="default-inputfield event-form-input" style="background-color:white;">
+                <select ng-model="event.category" ng-change="updateEvent(event)" class="default-inputfield event-form-input" style="background-color:white;">
                   <option value="select-category" ng-selected="event.category=='select-category'">Select Category</option>
                   <option ng-repeat="cat in categoryList" ng-selected="event.category==cat">{{cat}}</option>
                 </select>
@@ -150,7 +150,7 @@
                 <label style="margin-top:2px;">Latitude & Longitude</label>                
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input ng-model="date" type="text" ng-change="getAddress()" class="default-inputfield event-form-input" placeholder="Search"/>
+                <input ng-model="searchAddress" type="text" ng-change="getUpdateEventCoordinates(event)" class="default-inputfield event-form-input" placeholder="Search"/>
               </div>
             </div>
 
@@ -158,8 +158,8 @@
               <div class="col-xs-12 col-sm-3 col-md-2">               
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-               <span style="font-size:18px;color:#757575">12233.54545</span>,
-               <span style="font-size:18px;color:#757575">3445555</span>
+               <span style="font-size:18px;color:#757575">{{event.coordinates[0]}}</span>,
+               <span style="font-size:18px;color:#757575">{{event.coordinates[1]}}</span>
               </div>
             </div>
 
@@ -168,8 +168,8 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <div class="get-coordinates-map">
-                  <map center="[47.795402, 13.302220]">
-                   <marker position="[47.795402, 13.302220]"  on-dragend="markerDropped()" draggable="true"></div>
+                  <map center="{{event.coordinates}}">
+                   <marker position="{{event.coordinates}}"  on-dragend="updateEventMarkerDropped($event,event)" draggable="true"></div>
                   </map>                  
                 </div>
               </div>
