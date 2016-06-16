@@ -42,7 +42,8 @@ app.controller('adminDashboardController',
         }        
     };
 
-    $scope.updateEvent=function(eventObject){
+    $scope.updateEvent=function($event,eventObject){
+        $event.preventDefault();
         var errorMessage=_validateEventFields(eventObject);
         if(errorMessage){
             errorNotify(errorMessage);
