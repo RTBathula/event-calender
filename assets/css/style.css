@@ -37,6 +37,12 @@
     -webkit-align-items:center;    
 }
 
+.flex-equal-items{
+  flex:1;
+  -moz-flex:1;
+  -webkit-flex:1;
+}
+
 .vertical-center{
    /* Flex row rules */
     display: flex;
@@ -87,11 +93,10 @@
 .cf { zoom: 1; }
 
 
-/**********Calender CSS*********/
+/**********App CSS*********/
 .map-wrapper{
 	width:100%;
-	height: 300px;
-	border:1px solid red;	
+	height: 300px;		
 }
 .search-wrapper{
 	width:100%;
@@ -245,4 +250,29 @@
 	width: 500px;
 	height: 300px;
 }
+.strip-part-parent{
+	width:100%;
+	height:55px;
+	padding:12px;
+}
+.strip-part-child{
+	height:100%;
+	width:100%;
+	border-radius: 2.5px;	
+}
 
+.switch-cat{
+	background-color: white;
+	border-radius: 2.5px;
+}
+.switch-cat-active{
+	background-color: #3498DB;
+	border-radius: 2.5px;
+	color:white;
+}
+.switch-cat-active button{
+	height: 100%;
+	width: 100%
+	background-color: #3498DB;
+	color:white;
+}

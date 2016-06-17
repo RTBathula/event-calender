@@ -2,18 +2,36 @@
 <section ng-init="init()">
 <!--Map-->
 <div class="map-wrapper">
-  <map center="[40,30]" zoom="2">
-   <marker ng-repeat="event in eventsMap" position="{{event.coordinates}}"></div>
-   <info-window id="1" position="{{event.coordinates}}" >
-     <div ng-non-bindable>
-       Chicago, IL<br/>
-       LatLng: , , <br/>
-       World Coordinate: , , <br/>
-       Pixel Coordinate: , , <br/>
-       Tile Coordinate: ,  at Zoom Level 
-     </div>
-   </info-window>
-  </map>
+  <ng-map center="[40,30]" zoom="2">
+   <marker  ng-repeat="calenderEvent in eventsMap" id="marker-{{$index}}" position="{{calenderEvent.coordinates}}" on-click="showMsudydu($event)"></div>
+
+    <info-window id="bar" position="41.850033,-87.6500523" max-width="200">
+      <div ng-non-bindable>
+        <div id="siteNotice"></div>
+        <h1 id="firstHeading" class="firstHeading">Uluru</h1>
+        <div id="bodyContent">
+          <p>
+          <b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large
+          sandstone rock formation in the southern part of the
+          Northern Territory, central Australia. It lies 335 km (208 mi)
+          south west of the nearest large town, Alice Springs; 450 km
+          (280 mi) by road. Kata Tjuta and Uluru are the two major
+          features of the Uluru - Kata Tjuta National Park. Uluru is
+          sacred to the Pitjantjatjara and Yankunytjatjara, the
+          Aboriginal people of the area. It has many springs, waterholes,
+          rock caves and ancient paintings. Uluru is listed as a World
+          Heritage Site.
+          </p>
+          <p>Attribution: Uluru,
+          <a href="http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">
+            http://en.wikipedia.org/w/index.php?title=Uluru
+          </a>
+          (last visited June 22, 2009).</p>
+        </div>
+      </div>
+    </info-window>
+
+  </ng-map>
 </div>
 <!--/Map--> 
 
@@ -21,21 +39,38 @@
 <div class="search-wrapper">
   <div class="container">   
       <div class="row">
-        <div class="col-xs-7 col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-4">
-          <div style="width:100%;height:100%;background-color:white;">
-            Search
+
+        <div class="col-xs-6 col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-4">
+          <div class="strip-part-parent">
+            <div class="strip-part-child">
+              <div class="vertical-center" style="height:100%;width:100%;background-color:white;">
+              SEARCH
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-xs-2 col-sm-3 col-md-2">
-          <div style="width:100%;height:100%;background-color:white;">
-            Mobile
+
+        <div class="visible-xs col-xs-2">
+          <div class="strip-part-parent">
+            <div class="flex-column-center strip-part-child" style="background-color:white;">
+              <i class="fa fa-crosshairs" aria-hidden="true"></i>
+            </div>
           </div>
         </div>
-        <div class="visible-xs col-xs-3">
-          <div style="width:100%;height:100%;background-color:white;">
-            Tooglers
+
+        <div class="col-xs-4 col-sm-3 col-md-2">
+          <div class="strip-part-parent">
+            <div class="flex-row strip-part-child">
+              <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatA'}" style="height:100%;">
+                <button ng-click="toggleCategory('CatA')" class="default-inputfield" style="background-color:transparent;">CatA</button>
+              </div>
+              <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatB'}" style="height:100%;margin-left:6px;">
+                <button ng-click="toggleCategory('CatB')" class="default-inputfield" class="default-inputfield" style="background-color:transparent;">CatB</button>
+              </div>
+            </div>            
           </div>
-        </div>
+        </div> 
+
       </div>
   </div>      
 </div>

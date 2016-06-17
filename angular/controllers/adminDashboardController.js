@@ -8,6 +8,7 @@ app.controller('adminDashboardController',
     $scope.searchAddress=null;
 	$scope.eventList=[];
 	$scope.toggleEventEdit={};
+    $scope.editSearchAddress={};
 
     $scope.init=function(){
     	$scope.userName=$.cookie('username');
@@ -42,8 +43,7 @@ app.controller('adminDashboardController',
         }        
     };
 
-    $scope.updateEvent=function($event,eventObject){
-        $event.preventDefault();
+    $scope.updateEvent=function(eventObject){        
         var errorMessage=_validateEventFields(eventObject);
         if(errorMessage){
             errorNotify(errorMessage);
@@ -148,10 +148,12 @@ app.controller('adminDashboardController',
     };
 
     $scope.getUpdateEventCoordinates=function(eventObject){
-        _getCoordinates($scope.searchAddress).then(function(coordinates){
-            eventObject.coordinates=coordinates;
-            $scope.updateEvent(eventObject);
-        });     
+        if($scope.editSearchAddress[eventObject._id]){
+           _getCoordinates($scope.editSearchAddress[eventObject._id]).then(function(coordinates){
+                eventObject.coordinates=coordinates;
+                $scope.updateEvent(eventObject);
+            }); 
+        }             
     };
 
     $scope.markerDropped=function($event){        

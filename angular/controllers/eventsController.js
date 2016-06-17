@@ -34,13 +34,16 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap',
     		$scope.activeCategory="CatB";
     		$scope.eventsMap=angular.copy($scope.eventListCatB);
     	}
-    };
+    }; 
 
-    $scope.weDontLike = function(name) {
-	    return function(friend) {
-	        return friend.name != name;
-	    }
-	};
+    NgMap.getMap().then(function(map) {
+        $scope.map = map;
+    }); 
+
+    $scope.showMsudydu=function(event){
+        $scope.map.showInfoWindow(event, 'bar');
+    };
+      
 
     /******Private Functions********/
     function getAllEvents(){

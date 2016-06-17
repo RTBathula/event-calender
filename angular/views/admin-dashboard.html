@@ -61,7 +61,7 @@
           <!--/Shrink-->
 
           <!--Expand-->
-          <div ng-show="toggleEventEdit[event._id]==true" class="expand-bx">           
+          <div ng-if="toggleEventEdit[event._id]==true" class="expand-bx">           
 
             <div class="row" style="margin-top:15px;">
               <div class="col-xs-12 col-sm-3 col-md-2">
@@ -150,7 +150,7 @@
                 <label style="margin-top:2px;">Latitude & Longitude</label>                
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
-                <input ng-model="searchAddress" type="text" ng-change="getUpdateEventCoordinates(event)" class="default-inputfield event-form-input" placeholder="Search"/>
+                <input ng-model="editSearchAddress[event._id]" type="text" ng-change="getUpdateEventCoordinates(event)" class="default-inputfield event-form-input" placeholder="Search"/>
               </div>
             </div>
 
@@ -194,7 +194,7 @@
     </div>
     
     <!--Add New Event Form-->
-    <div class="row" ng-show="addNewEventFormShow">
+    <div class="row" ng-if="addNewEventFormShow">
       <div class="col-xs-12  col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
         <!--Event-->
         <div class="admin-event-bx">       
