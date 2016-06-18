@@ -9,7 +9,8 @@
     "angular": "^1.5.7",
     "ng-sortable": "^1.3.6",
     "ngmap": "^1.17.3",
-    "angularjs-datepicker": "^2.1.4"
+    "angularjs-datepicker": "^2.1.4",
+    "angular-media-queries": "^0.6.0"
   },
   "devDependencies": {}
 }

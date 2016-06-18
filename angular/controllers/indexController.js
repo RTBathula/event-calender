@@ -1,4 +1,5 @@
-app.controller('indexController',	['$scope','$rootScope','$q',function($scope,$rootScope,$q){	
+app.controller('indexController',	['$scope','$rootScope','$q','$location',function($scope,$rootScope,$q,$location){
+
  	_getCountries().then(function(countriesJson){
    		$rootScope.countryList=countriesJson;                         			
    	});
@@ -19,6 +20,30 @@ app.controller('indexController',	['$scope','$rootScope','$q',function($scope,$r
 	    xmlhttp.send();
 
 	    return  q.promise;
-	}			
+	}
+
+	
+    $scope.$watch(function(scope) {
+      return $location.path();
+    },function(newPath,oldPath) {
+    	if(newPath!="/" && newPath!=""){
+    		var isLogged=false;
+
+    		//Check Cookie 
+    		if(!$.cookie('username') || $.cookie('username')=="null" || $.cookie('username')=="undefined"){
+    			isLogged=false;
+    		}else if($.cookie('username')){
+    			isLogged=true;
+    		}
+
+    		//Check Path
+    		if(!isLogged){          
+	         	window.location.href="/#/login";
+	        }else if(isLogged){	
+	        	window.location.href="#/admin-dashboard";          
+	        }
+    	}
+                   
+    });	 		
 		
 }]);

@@ -14,9 +14,13 @@ app.controller('adminDashboardController',
     	$scope.userName=$.cookie('username');
     	$scope.addNewEventFormShow=false;
         _initAddEventDefaultForm();
+        $scope.loadingList=true;
         getAllEvents().then(function(list){
+            $scope.loadingList=false;
             $scope.eventList=list;
         },function(error){
+            $scope.loadingList=false;
+            errorNotify("Unable to load the list now..try loading again.");
         });
     };
 
@@ -50,14 +54,17 @@ app.controller('adminDashboardController',
         }
         if(!errorMessage){
             //Update to backend
+            $scope.updateSpinner=true;
             var cloneEventObject=angular.copy(eventObject);
             var eventId=cloneEventObject._id;
             delete cloneEventObject._id;
 
             eventService.updateEventById(eventId,cloneEventObject)
             .then(function(resp){
+                $scope.updateSpinner=false;
             },function(error){
                 errorNotify(error);
+                $scope.updateSpinner=false;
             });
         }        
     };
@@ -100,6 +107,7 @@ app.controller('adminDashboardController',
 	       return true;
 	    },	   
 	    dragEnd : function(event) {
+            $scope.updateSpinner=true;
 	    	var destIndex=event.dest.index;
             var sourceIndex=event.source.index;           
             
@@ -132,6 +140,7 @@ app.controller('adminDashboardController',
             //Assign new Order
             $scope.eventList=angular.copy($scope.cloneEventList);
             $scope.cloneEventList=[];
+            $scope.updateSpinner=false;
 	    },   
 	    allowDuplicates: true
 	};    
@@ -141,8 +150,8 @@ app.controller('adminDashboardController',
       window.location.href="/#/login";
     };
 
-    $scope.getAddEventCoordinates=function(){
-        _getCoordinates($scope.searchAddress).then(function(coordinates){
+    $scope.getAddEventCoordinates=function(searchAddress){
+        _getCoordinates(searchAddress).then(function(coordinates){
             $scope.addNewEventForm.coordinates=coordinates;
         });     
     };
@@ -192,7 +201,7 @@ app.controller('adminDashboardController',
             endDate     : null,
             category    : "select-category",
             coordinates : [47.795402,13.302220],//Default to Austria                      
-            rsvp        : 0,
+            rsvp        : [],
             sortOrder   : 0
         };
     }

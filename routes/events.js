@@ -46,6 +46,18 @@ module.exports = function() {
         	return res.status(400).send(error);
         });  
     });
+
+    app.put('/event/:eventId/rsvp', function(req,res,next) {         
+
+        var eventId=req.params.eventId; 
+        var userId = req.body.userId;        
+
+        global.eventsService.rsvpEvent(eventId,userId).then(function(result){
+            return res.status(200).json(result);
+        },function(error){
+            return res.status(400).send(error);
+        });  
+    });
    
     return app;
 }

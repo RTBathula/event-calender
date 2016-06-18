@@ -58,6 +58,20 @@ app.factory('eventService', ['$q','$http',function ($q,$http) {
       return  q.promise;
     }; 
 
+    global.rsvpEvent = function(eventId,userId){
+      var q=$q.defer();
+
+      $http.put('event/'+eventId+'/rsvp',{userId:userId}).
+      success(function(data, status, headers, config) {
+        q.resolve(data);          
+      }).
+      error(function(data, status, headers, config) {
+        q.reject(data);
+      });
+
+      return  q.promise;
+    };
+
     return global;
 
 }]);

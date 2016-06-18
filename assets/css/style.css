@@ -165,7 +165,7 @@
 }
 .menu-wrapper{
 	width:100%;
-	height: 60px;	
+	height:auto;	
 	border:1px solid gray;	
 	background-color: #D8D8D8;
 }
@@ -265,7 +265,7 @@
 	background-color: white;
 	border-radius: 2.5px;
 }
-.switch-cat-active{
+.switch-cat-active,.map-activate-btn{
 	background-color: #3498DB;
 	border-radius: 2.5px;
 	color:white;
@@ -275,4 +275,23 @@
 	width: 100%
 	background-color: #3498DB;
 	color:white;
+}
+
+.ng-map-info-window {
+	background-color: #F4F4F4;	
+}
+.ng-map-info-window div:first-child > div:nth-child(1) {
+	border-top-color: #F4F4F4 !important;
+}
+.ng-map-info-window div:first-child > div:nth-child(3) div {
+	background-color: transparent !important;
+}
+.ng-map-info-window div:first-child > div:nth-child(4) {
+	background-color: transparent !important;
+}
+
+#infobodyContent{
+	max-width: 250px;
+	min-width:200px;
+	width: auto;
 }

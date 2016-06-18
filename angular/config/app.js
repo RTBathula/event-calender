@@ -1,4 +1,4 @@
-var app=angular.module('Calender',['ui.router','720kb.datepicker','ngMap','as.sortable']);
+var app=angular.module('Calender',['ui.router','720kb.datepicker','ngMap','as.sortable','matchMedia']);
 
 
 /*********************Notifications******************************/ 

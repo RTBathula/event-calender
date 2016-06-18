@@ -8,26 +8,21 @@ app.config([
 
   $stateProvider.state('events',{
     url:'/',
-    templateUrl:'angular/views/events.html',
-    controller: 'eventsController'               
+    templateUrl:'angular/views/events.html', 
+    controller: 'eventsController'                 
   }); 
 
   $stateProvider.state('login',{
     url:'/login',
     templateUrl:'angular/views/login.html',
-    controller: 'loginController'               
+    controller: 'loginController'                 
   });
 
   $stateProvider.state('adminDashboard',{
     url:'/admin-dashboard',
     templateUrl:'angular/views/admin-dashboard.html',
-    controller: 'adminDashboardController'              
-  });       
-
-  //cors.
-  $httpProvider.defaults.withCredentials = true;
-  $httpProvider.defaults.useXDomain = true;
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];   
+    controller: 'adminDashboardController'                
+  });     
 
 }]);
 
@@ -77,4 +72,4 @@ app.filter('limittext', function($rootScope) {
   }
 });
 
- 
+

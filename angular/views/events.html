@@ -2,74 +2,113 @@
 <section ng-init="init()">
 <!--Map-->
 <div class="map-wrapper">
-  <ng-map center="[40,30]" zoom="2">
-   <marker  ng-repeat="calenderEvent in eventsMap" id="marker-{{$index}}" position="{{calenderEvent.coordinates}}" on-click="showMsudydu($event)"></div>
+  <!--Interactive Image-->
+  <div  ng-if="isInteractiveMap" style="width:100%;height:100%;">
+    <ng-map zoom="{{mapOptions.zoom}}" center="{{mapOptions.center}}" style="width:100%;height:100%;">    
 
-    <info-window id="bar" position="41.850033,-87.6500523" max-width="200">
-      <div ng-non-bindable>
-        <div id="siteNotice"></div>
-        <h1 id="firstHeading" class="firstHeading">Uluru</h1>
-        <div id="bodyContent">
-          <p>
-          <b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large
-          sandstone rock formation in the southern part of the
-          Northern Territory, central Australia. It lies 335 km (208 mi)
-          south west of the nearest large town, Alice Springs; 450 km
-          (280 mi) by road. Kata Tjuta and Uluru are the two major
-          features of the Uluru - Kata Tjuta National Park. Uluru is
-          sacred to the Pitjantjatjara and Yankunytjatjara, the
-          Aboriginal people of the area. It has many springs, waterholes,
-          rock caves and ancient paintings. Uluru is listed as a World
-          Heritage Site.
-          </p>
-          <p>Attribution: Uluru,
-          <a href="http://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">
-            http://en.wikipedia.org/w/index.php?title=Uluru
-          </a>
-          (last visited June 22, 2009).</p>
-        </div>
-      </div>
-    </info-window>
+      <!--Markers-->
+      <marker  ng-repeat="calederEvent in eventsMap | limitTo:10" position="{{calederEvent.coordinates}}"  on-click="showDetails(calederEvent)" id="{{calederEvent._id}}"  title="{{calederEvent.sno}}. {{calederEvent.title}}"></marker> 
 
-  </ng-map>
+      <!--Info Window-->
+      <info-window id="infowindowid">
+          <div ng-non-bindable>         
+            <div id="infobodyContent">
+              <div class="each-line cf">
+                <div class="pull-left">
+                {{InfoWindowContent.startDate | formatstartdate}} - {{InfoWindowContent.endDate | formatenddate}}
+                </div>
+                <div class="pull-right event-cat-name">
+                {{InfoWindowContent.category}}
+                </div>
+              </div>
+
+              <div class="each-line cf">
+                <div class="pull-left">
+                  <strong>{{InfoWindowContent.title}}</strong>
+                </div>
+                <div class="pull-right event-cat-name" style="margin-right:26px;">
+                  {{InfoWindowContent.sno}}
+                </div>
+              </div>
+
+              <div class="each-line cf">
+                <div class="pull-left">
+                  <strong>{{InfoWindowContent.address}} / {{InfoWindowContent.country | getcountrycode}}</strong>
+                </div>                
+              </div>
+
+              <div class="each-line cf" style="margin-top:20px;">
+                <div class="pull-left">
+                  <strong>{{InfoWindowContent.description | limittext}}</strong>
+                </div>                
+              </div>
+              
+              <div class="each-line cf">
+                <div class="pull-left">
+                  <button ng-click="rsvpMe()" class="default-inputfield show-map-btn">RSVP</button>
+                </div>                
+              </div>
+            </div>
+          </div>
+        </info-window>
+      
+    </ng-map>
+  </div>
+
+  <!--Static Image-->
+  <div ng-if="!isInteractiveMap" style="width:100%;height:100%;position:relative;">
+    <img id="selectd-file-img"  style="height:100%;">
+    <div style="position:absolute;left:40%;bottom:10%;">
+      <button ng-click="activateInteractiveMap()" class="default-inputfield map-activate-btn" style="padding:7px 14px 7px 14px;">Click to activate</button>
+    </div>
+  </div>
+
 </div>
 <!--/Map--> 
 
 <!--Search Strip-->
 <div class="search-wrapper">
   <div class="container">   
-      <div class="row">
+      <div class="row">  
 
-        <div class="col-xs-6 col-sm-7 col-sm-offset-1 col-md-5 col-md-offset-4">
-          <div class="strip-part-parent">
-            <div class="strip-part-child">
-              <div class="vertical-center" style="height:100%;width:100%;background-color:white;">
-              SEARCH
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-5">
+          <div class="strip-part-parent flex-row">
+     
+              <div style="flex:5;height:100%;">
+                <div class="vertical-center" style="height:100%;width:100%;background-color:white;border-radius:2px;">
+                  <input places-auto-complete ng-model="searchAddress"   on-place-changed="placeChanged()" placeholder="Search" style="height:100%;width:100%;padding-left:3px;font-size:16px;border-radius:2px;padding-right:3px;" class="default-inputfield"/>
+                </div>
               </div>
-            </div>
+
+              <div class="visible-xs" style="flex:0.5;width:20px;height:100%;margin-left:20px;">
+                <div ng-click="getCurrentLocation()" class="flex-column-center strip-part-child" style="cursor:pointer;background-color:white;" data-toggle="tooltip" title="Use my place">
+                   <i class="fa fa-crosshairs" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div style="flex:2;width:100px;height:100%;margin-left:20px;">
+                <!--Desktops and Tabs-->
+                <div ng-if="!isMobile" class="flex-row strip-part-child">
+                  <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatA'}" style="height:100%;">
+                    <button ng-click="toggleCategory('CatA')" class="default-inputfield" style="background-color:transparent;">CatA</button>
+                  </div>
+                  <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatB'}" style="height:100%;margin-left:6px;">
+                    <button ng-click="toggleCategory('CatB')" class="default-inputfield" class="default-inputfield" style="background-color:transparent;">CatB</button>
+                  </div>
+                </div>
+
+                <!--Mobile-->
+                <div ng-if="isMobile" class="flex-row strip-part-child">
+                  <select ng-model="activeCategory" ng-change="toggleCategory(activeCategory)" class="default-inputfield" style="height:100%;width:100%;border-radius: 2.5px;background-color:white;">
+                    <option ng-selected="activeCategory!='CatA' && activeCategory!='CatB'">Category</option>
+                    <option ng-selected="activeCategory=='CatA'">CatA</option>
+                    <option ng-selected="activeCategory=='CatB'">CatB</option>
+                  </select>
+                </div>
+              </div>
+            
           </div>
         </div>
-
-        <div class="visible-xs col-xs-2">
-          <div class="strip-part-parent">
-            <div class="flex-column-center strip-part-child" style="background-color:white;">
-              <i class="fa fa-crosshairs" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xs-4 col-sm-3 col-md-2">
-          <div class="strip-part-parent">
-            <div class="flex-row strip-part-child">
-              <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatA'}" style="height:100%;">
-                <button ng-click="toggleCategory('CatA')" class="default-inputfield" style="background-color:transparent;">CatA</button>
-              </div>
-              <div class="flex-column-center flex-equal-items switch-cat" ng-class="{'switch-cat-active':activeCategory=='CatB'}" style="height:100%;margin-left:6px;">
-                <button ng-click="toggleCategory('CatB')" class="default-inputfield" class="default-inputfield" style="background-color:transparent;">CatB</button>
-              </div>
-            </div>            
-          </div>
-        </div> 
 
       </div>
   </div>      
@@ -78,9 +117,9 @@
 </section>
 
 <section class="event-wrapper">
-  <div class="container">   
+  <div ng-show="!loadingList" class="container">   
     <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-6 col-md-offset-1">
+      <div ng-show="eventListCatA.length>0" class="col-xs-12 col-sm-8 col-md-6 col-md-offset-1">
 
         <!--Category Header-->
         <div class="row">
@@ -95,7 +134,7 @@
         <!--Events List-->
         <div class="row">
           <!--Each Event Box-->
-          <div ng-repeat="event in eventListCatA | orderBy:'sortOrder'" ng-show="event.category=='CatA'" class="col-xs-6 col-sm-6 col-md-6">
+          <div ng-repeat="event in eventListCatA | orderBy:'sortOrder' | limitTo:10" ng-show="event.category=='CatA'" class="col-xs-6 col-sm-6 col-md-6">
             <div class="event-bx">
                 <div class="each-line cf">
                   <div class="pull-left">
@@ -111,7 +150,7 @@
                     <strong>{{event.title}}</strong>
                   </div>
                   <div class="pull-right event-cat-name" style="margin-right:26px;">
-                  {{$index+1}}
+                  {{event.sno}}
                   </div>
                 </div>
 
@@ -129,7 +168,7 @@
                 
                 <div class="each-line cf">
                   <div class="pull-left">
-                    <button class="default-inputfield show-map-btn">Show on map</button>
+                    <button ng-click="showDetails($event,event)" class="default-inputfield show-map-btn">Show on map</button>
                   </div>                
                 </div> 
               </div>
@@ -140,7 +179,7 @@
       
       </div>
 
-      <div class="col-xs-12 col-sm-4 col-md-3 col-md-offset-1">
+      <div ng-show="eventListCatB.length>0" class="col-xs-12 col-sm-4 col-md-3 col-md-offset-1">
 
         <!--Category Header-->
         <div class="row">
@@ -155,7 +194,7 @@
         <!--Events-->
         <div class="row">
           <!--Each Event Box--> 
-          <div ng-repeat="event in eventListCatB | orderBy:'sortOrder'" ng-show="event.category=='CatB'" class="col-xs-12 col-sm-12 col-md-12">
+          <div ng-repeat="event in eventListCatB | orderBy:'sortOrder' | limitTo:10" ng-show="event.category=='CatB'" class="col-xs-12 col-sm-12 col-md-12">
 
               <div class="event-bx">
                 <div class="each-line cf">
@@ -169,10 +208,10 @@
 
                 <div class="each-line cf">
                   <div class="pull-left">
-                    <strong>{{event.title}}</strong>
+                    <strong>{{event.title | limittext}}</strong>
                   </div>
                   <div class="pull-right event-cat-name" style="margin-right:26px;">
-                  {{$index+1}}
+                  {{event.sno}}
                   </div>
                 </div>
 
@@ -190,7 +229,7 @@
                 
                 <div class="each-line cf">
                   <div class="pull-left">
-                    <button class="default-inputfield show-map-btn">Show on map</button>
+                    <button ng-click="showDetails($event,event)" class="default-inputfield show-map-btn">Show on map</button>
                   </div>                
                 </div> 
               </div>               
@@ -203,4 +242,15 @@
 
     </div>
   </div>
+
+  <!--While Loading-->
+  <div ng-show="loadingList || (eventListCatB.length==0 && eventListCatA.length==0)" style="width:100vw;height:38.6vh;" class="flex-column-center">   
+    <div ng-if="loadingList">
+      <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>     
+    </div>
+    <div ng-if="!loadingList && eventListCatB.length==0">
+      <span style="font-size:18px; color:#C1C1C1;">No Events found</span>    
+    </div>
+  </div>  
+
 </section>

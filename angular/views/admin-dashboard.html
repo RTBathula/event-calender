@@ -4,8 +4,20 @@
 <div class="container-fluid"> 
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
-       <div class="menu-wrapper">
-          <div class="pull-right" style="height:100%;">
+       <div class="menu-wrapper cf">
+
+          <div ng-show="updateSpinner" class="pull-left" style="height:60px;">
+            <div class="vertical-center" style="height:100%;padding-left:40px;">
+              <div class="flex-row">
+                <p style="margin-top:3px;">
+                  <i class="fa fa-spinner fa-spin"></i>&nbsp;
+                  <span>Updating..</span>
+                </p>                
+              </div>
+            </div>
+          </div>
+
+          <div class="pull-right" style="height:60px;">
             <div class="vertical-center" style="height:100%;padding-right:40px;">
               <div class="flex-row">
                 <p style="margin-top:4px;margin-right:7px;"><em>{{userName}} logged in</em></p>
@@ -13,6 +25,7 @@
               </div>
             </div>
           </div>
+
        </div>
     </div>  
   </div>
@@ -23,7 +36,7 @@
 <section class="admin-eventlist-wrapper" ng-init="init()"> 
 
   <!---EVENT LIST-->
-  <div class="container" data-as-sortable="dragControlListeners" data-ng-model="eventList">   
+  <div ng-if="!loadingList" class="container" data-as-sortable="dragControlListeners" data-ng-model="eventList">   
     <div ng-repeat="event in eventList | orderBy:'sortOrder'" class="row" data-as-sortable-item>
       <div data-as-sortable-item-handle class="col-xs-12  col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1">
         <!--Event-->
@@ -168,7 +181,7 @@
               </div>
               <div class="col-xs-12 col-sm-8 col-md-8">
                 <div class="get-coordinates-map">
-                  <map center="{{event.coordinates}}">
+                  <map center="{{event.coordinates}}" zoom="2">
                    <marker position="{{event.coordinates}}"  on-dragend="updateEventMarkerDropped($event,event)" draggable="true"></div>
                   </map>                  
                 </div>
@@ -184,7 +197,7 @@
     </div>
   </div>
 
-  <div class="container" style="margin-top:20px;"> 
+  <div ng-if="!loadingList" class="container" style="margin-top:20px;"> 
 
     <!--Add New Event Button-->
     <div class="row">
@@ -288,7 +301,7 @@
                   <label style="margin-top:2px;">Latitude & Longitude</label>                
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-8">
-                  <input ng-model="searchAddress" type="text" ng-change="getAddEventCoordinates()" class="default-inputfield event-form-input" placeholder="Search"/>
+                  <input ng-model="searchAddress" type="text" ng-change="getAddEventCoordinates(searchAddress)" class="default-inputfield event-form-input" placeholder="Search"/>
                 </div>
               </div>
 
@@ -306,7 +319,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-8">
                   <div class="get-coordinates-map">
-                    <ng-map center="{{addNewEventForm.coordinates}}">
+                    <ng-map center="{{addNewEventForm.coordinates}}" zoom="2">
                      <marker position="{{addNewEventForm.coordinates}}"  on-dragend="markerDropped()" draggable="true"></div>
                     </ng-map>                  
                   </div>
@@ -334,5 +347,13 @@
       </div>
     </div>
   </div>
+
+
+   <!--While Loading-->
+  <div ng-show="loadingList" style="width:100vw;height:79.6vh;" class="flex-column-center">   
+    <div>
+      <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>     
+    </div>
+  </div> 
 
 </section>
