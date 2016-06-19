@@ -1,0 +1,25 @@
+# Event Calender
+Find and RSVP the events around the world
+
+#Demo
+http://calender-event.herokuapp.com
+
+#Getting Started
+
+Fork and clone the repository. Install dependencies with:
+
+``npm install``
+``bower install``
+
+#Database connection
+Run MongoDB locally or run through service and add MongoDB connection string config/keys.js file
+
+Example: unser config/keys.js
+```
+{
+  //Local connection
+  mongoConnectionString: "mongodb://localhost:27017"
+}
+```
+
+
