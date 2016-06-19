@@ -6,6 +6,12 @@ module.exports = function(){
 
   return {
   
+    /*Desc   : Create new Event
+      Params : Event object containing all fields
+      Returns: Promise
+               Resolve->saved Event Object
+               Reject->Error on save()
+    */
     createEvent: function (eventObject) {      
 
         var _self = this;
@@ -31,6 +37,12 @@ module.exports = function(){
         return deferred.promise;
     }, 
 
+    /*Desc   : Get All Events
+      Params : 
+      Returns: Promise
+               Resolve->list of events
+               Reject->Error on find()
+    */
     getAllEvents: function () {      
 
         var _self = this;
@@ -53,6 +65,13 @@ module.exports = function(){
 
         return deferred.promise;
     },
+
+    /*Desc   : Update Event by id
+      Params : EventId,New event object
+      Returns: Promise
+               Resolve->Success message
+               Reject->Error on findOneAndUpdate()
+    */
     updateEvent: function (eventId,eventObject) {      
 
         var _self = this;
@@ -75,6 +94,12 @@ module.exports = function(){
 
         return deferred.promise;
     },
+    /*Desc   : Delete Event by id
+      Params : EventId
+      Returns: Promise
+               Resolve->Response on deletion
+               Reject->Error on findOneAndDelete()
+    */
     deleteEvent: function (eventId) {      
 
         var _self = this;
@@ -97,7 +122,12 @@ module.exports = function(){
 
         return deferred.promise;
     },
-
+    /*Desc   : RSVP Event by id
+      Params : EventId, UserId
+      Returns: Promise
+               Resolve->Success message on update
+               Reject->Error on find() or already user RSVP'd or findOneAndUpdate()
+    */
     rsvpEvent: function (eventId,userId) {      
 
         var _self = this;

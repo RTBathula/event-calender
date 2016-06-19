@@ -54,7 +54,7 @@
                 <div style="font-weight:700;">/{{event.country | getcountrycode}}</div>&nbsp;
                 <div style="font-style:italic">{{event.startDate | formatstartdate}} - </div>
                 <div style="font-style:italic">&nbsp;{{event.endDate | formatenddate}}</div>
-                <div>&nbsp;&nbsp;RSVP:{{event.rsvp}}</div>
+                <div>&nbsp;&nbsp;RSVP:{{event.rsvp.length}}</div>
               </div>
 
               <div class="pull-right flex-row"> 
@@ -65,7 +65,7 @@
                   <button ng-click="toggleEvent(event._id,false)" ng-show="toggleEventEdit[event._id]==true" class="default-inputfield admin-event-btn">hide</button> 
                 </div> 
                 <div>               
-                  <button ng-click="deleteEvent(event._id)" class="default-inputfield admin-event-btn">delete</button> 
+                  <button ng-click="initDeleteEvent(event._id)" class="default-inputfield admin-event-btn">delete</button> 
                 </div>                              
               </div>
              
@@ -348,7 +348,6 @@
     </div>
   </div>
 
-
    <!--While Loading-->
   <div ng-show="loadingList" style="width:100vw;height:79.6vh;" class="flex-column-center">   
     <div>
@@ -357,3 +356,27 @@
   </div> 
 
 </section>
+
+<!--Delete Event Confirmation-->
+<div class="modal fade" id="delete-event-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Delete Event</h4>
+      </div>
+      <div class="modal-body flex-column-center">
+        <p>Are you sure you want to delete this event?&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button ng-show="!deleteSpinner" type="button" ng-click="deleteEvent()" class="btn btn-primary">Yes</button>
+        <!--While deleting-->
+        <button ng-show="deleteSpinner" type="button"  class="btn btn-primary">
+          <i class="fa fa-spinner fa-spin"></i>&nbsp;
+          Deleting..
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

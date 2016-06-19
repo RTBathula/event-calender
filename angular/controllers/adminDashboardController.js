@@ -77,11 +77,17 @@ app.controller('adminDashboardController',
     	}    	
     };
 
-    $scope.deleteEvent=function(eventId){
-        eventService.deleteEvent(eventId).then(function(resp){
+    $scope.initDeleteEvent=function(eventId){
+        $scope.requestedEventId=eventId;
+        $("#delete-event-modal").modal();
+    };
+
+    $scope.deleteEvent=function(){
+        $scope.deleteSpinner=true;
+        eventService.deleteEvent($scope.requestedEventId).then(function(resp){
             var deleteIndex;
             for(var i=0;i<$scope.eventList.length;++i){
-                if($scope.eventList[i]._id==eventId){
+                if($scope.eventList[i]._id==$scope.requestedEventId){
                     deleteIndex=i;
                     break;
                 }
@@ -89,7 +95,12 @@ app.controller('adminDashboardController',
             if(deleteIndex>-1){
                 $scope.eventList.splice(deleteIndex,1);
             }
+            $scope.deleteSpinner=false;
+            $scope.requestedEventId=null;
+            $("#delete-event-modal").modal("hide");
         },function(error){
+            $scope.deleteSpinner=false;
+            $scope.requestedEventId=null;
             errorNotify("Unable to delete event now..try again.");
         });
     };

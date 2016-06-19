@@ -3,7 +3,10 @@
 app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$window','screenSize','$http',
 	function ($scope, $q,eventService,NgMap,$window,screenSize,$http) {
     
+    //Variables
 	$scope.eventsMap=[];
+    $scope.eventListCatA=[];
+    $scope.eventListCatB=[];
     $scope.mapOptions={
         zoom:2,
         center:[40,30]
@@ -15,12 +18,16 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
        $scope.isMobile=true;
        $scope.isInteractiveMap=false;
     }
+    
+    //Map
+    NgMap.getMap().then(function(map) {
+        $scope.map = map;
+    });
 
+    //Init
     $scope.init=function(){   
         $scope.loadingList=true;    
-        getAllEvents().then(function(list){
-        	$scope.eventListCatA=[];
-        	$scope.eventListCatB=[];
+        getAllEvents().then(function(list){        	
             if(list && list.length){
 
                 var catASno=0;
@@ -68,29 +75,28 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
         }else{
             WarningNotify("Please choose category");
         }    	               
-    }; 
-
-    //Maps
-    NgMap.getMap().then(function(map) {
-        $scope.map = map;
-    });
+    };    
 
     $scope.placeChanged = function() {
-        var place = this.getPlace();
-        $scope.isInteractiveMap=true;
-        if(!$scope.map){
-            NgMap.getMap().then(function(map) {
-                $scope.map = map;                        
-                $scope.map.setCenter(place.geometry.location);
-                $scope.mapOptions.zoom=6;
+       var place = this.getPlace();
+       $scope.isInteractiveMap=true;
+
+       if(_checkAtleastOneMarker(place.geometry.location.lat(),place.geometry.location.lng())){             
+            if(!$scope.map){
+                NgMap.getMap().then(function(map) {
+                    $scope.map = map;                        
+                    $scope.map.setCenter(place.geometry.location);
+                    $scope.mapOptions.zoom=6;
+                    $scope.mapOptions.center=[place.geometry.location.lat(),place.geometry.location.lng()];
+                });
+            }else{     
+                $scope.mapOptions.zoom=6;                
+                $scope.map.setCenter(place.geometry.location);                
                 $scope.mapOptions.center=[place.geometry.location.lat(),place.geometry.location.lng()];
-            });
-        }else{
-            var place = this.getPlace();        
-            $scope.map.setCenter(place.geometry.location);
-            $scope.mapOptions.zoom=6;
-            $scope.mapOptions.center=[place.geometry.location.lat(),place.geometry.location.lng()];
-        }
+            }
+       }else{
+            WarningNotify("No Events found in selected location.");
+       }        
                  
     };
 
@@ -177,6 +183,42 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
         baseURL=baseURL+"&key=AIzaSyCmmRxCtWbVC9ZjU1Zz1maUGqQCjLRz4ks";       
         
         $("#selectd-file-img").attr("src",baseURL);        
+    }
+
+    function _checkAtleastOneMarker(lat,lng){   
+
+        var found=false;    
+        if($scope.eventListCatA.length>0){
+            for(var i=0;i<$scope.eventListCatA.length;++i){
+                found=geolib.isPointInCircle(
+                    {latitude: lat, longitude: lng},
+                    {latitude: $scope.eventListCatA[i].coordinates[0], longitude: $scope.eventListCatA[i].coordinates[1]},
+                    5000000
+                );
+
+                if(found){
+                    $scope.toggleCategory("CatA");
+                    break;
+                }
+            }
+        }  
+
+        if(!found && $scope.eventListCatB.length>0){
+            for(var i=0;i<$scope.eventListCatB.length;++i){
+                found=geolib.isPointInCircle(
+                    {latitude: lat, longitude: lng},
+                    {latitude: $scope.eventListCatB[i].coordinates[0], longitude: $scope.eventListCatB[i].coordinates[1]},
+                    5000000
+                );
+
+                if(found){
+                    $scope.toggleCategory("CatB");
+                    break;
+                }
+            }
+        }
+
+       return found;         
     }
 
     function _getFacebookId(){
