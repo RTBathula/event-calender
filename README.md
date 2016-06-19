@@ -28,6 +28,7 @@ Example: under config/keys.js
 
 #Run Server
 After completing all above steps run your node.js server
+
 ``node server``
 
 
