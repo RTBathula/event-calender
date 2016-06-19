@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$window','screenSize','$http',
-	function ($scope, $q,eventService,NgMap,$window,screenSize,$http) {
+app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$window','screenSize','$http','$timeout',
+	function ($scope, $q,eventService,NgMap,$window,screenSize,$http,$timeout) {
     
     //Variables
 	$scope.eventsMap=[];
@@ -108,8 +108,11 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
             $scope.toggleCategory("CatB");
         }
         $scope.InfoWindowContent=calenderEvent;
-        $scope.map.showInfoWindow('infowindowid',calenderEvent._id);
-        $window.scrollTo(0, 0);
+        $timeout(function() {
+            $scope.map.showInfoWindow('infowindowid',calenderEvent._id);
+            $window.scrollTo(0, 0);
+        }, 1000);
+        
     };
 
     $scope.rsvpMe=function(){
