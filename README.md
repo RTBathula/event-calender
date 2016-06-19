@@ -31,4 +31,11 @@ After completing all above steps run your node.js server
 
 ``node server``
 
+#Admin
+To add events 
+Log in as admin with
 
+**username**: admin
+**password**:secretpassword
+
+url: <domain>/#/login
