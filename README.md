@@ -9,17 +9,25 @@ http://calender-event.herokuapp.com
 Fork and clone the repository. Install dependencies with:
 
 ``npm install``
+
+and
+
 ``bower install``
 
 #Database connection
 Run MongoDB locally or run through service and add MongoDB connection string config/keys.js file
 
-Example: unser config/keys.js
+Example: under config/keys.js
 ```
 {
   //Local connection
   mongoConnectionString: "mongodb://localhost:27017"
 }
 ```
+
+
+#Run Server
+After completing all above steps run your node.js server
+``node server``
 
 
