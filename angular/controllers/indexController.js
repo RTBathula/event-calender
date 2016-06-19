@@ -22,7 +22,7 @@ app.controller('indexController',	['$scope','$rootScope','$q','$location',functi
 	    return  q.promise;
 	}
 
-	
+	//Check Router
     $scope.$watch(function(scope) {
       return $location.path();
     },function(newPath,oldPath) {
@@ -40,7 +40,7 @@ app.controller('indexController',	['$scope','$rootScope','$q','$location',functi
     		if(!isLogged){          
 	         	window.location.href="/#/login";
 	        }else if(isLogged){	
-	        	window.location.href="#/admin-dashboard";          
+	        	window.location.href="/#/admin-dashboard";          
 	        }
     	}
                    
