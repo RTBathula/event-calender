@@ -100,7 +100,13 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
                  
     };
 
-    $scope.showDetails=function(e,calenderEvent){
+    $scope.showDetails=function(e,calenderEvent){        
+        if(calenderEvent.category=="CatA"){
+            $scope.toggleCategory("CatA");
+        }
+        if(calenderEvent.category=="CatB"){
+            $scope.toggleCategory("CatB");
+        }
         $scope.InfoWindowContent=calenderEvent;
         $scope.map.showInfoWindow('infowindowid',calenderEvent._id);
         $window.scrollTo(0, 0);
