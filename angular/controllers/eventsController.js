@@ -119,7 +119,7 @@ app.controller('eventsController', ['$scope','$q', 'eventService', 'NgMap','$win
 
         _getFacebookId().then(function(userId){
             if(!userId){
-                errorNotify("Please authentic through facebook");
+                errorNotify("Please authorize app in your facebook by re-login");
             }
             if(userId){
                 eventService.rsvpEvent($scope.InfoWindowContent._id,userId)
