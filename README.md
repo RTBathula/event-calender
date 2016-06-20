@@ -31,13 +31,17 @@ After completing all above steps run your node.js server
 
 ``node server``
 
+##Now open 
+
+http://localhost:1447 in the browser
+
 #Admin
 To add events,Log in as admin with
 
 **username**: admin </br>
 **password**:secretpassword
 
-URL: &lt;domain&gt;/#/login
+URL: http://localhost:1447/#/login
 
 Hosted URL: http://calender-event.herokuapp.com/#/login
 
